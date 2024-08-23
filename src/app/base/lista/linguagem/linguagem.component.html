@@ -1,0 +1,90 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card [showHeader]="false" cardClass="table-card linguagem-list">
+            <form class="table-responsive">
+                <div class="datatable-top">
+                    <div class="dattable-search col-sm-6">
+                        <input id="table-complete-search" type="text" class="form-control" name="searchTerm"
+                            [(ngModel)]="service.searchTerm" placeholder="Search..." />
+                    </div>
+                    <div class="datatable-dropdown">
+                        <ul class="list-unstyled d-inline-flex align-items-center">
+                            <li>
+                                <div class="avatar avatar-s rounded-pill bg-primary" (click)="addLinguagem(content)"
+                                    ngbTooltip="Adicionar nova linguagem">
+                                    <i class="ti ti-plus f-20 text-white"></i>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col" sortable="id">ID</th>
+                            <th scope="col" sortable="nome">NOME</th>
+                            <th scope="col" sortable="usuarioCadastro">USUÁRIO CADASTRO</th>
+                            <th scope="col" sortable="datacadastro">DATA CADASTRO</th>
+                            <th scope="col" sortable="usuarioAlteracao">USUÁRIO ALTERAÇÃO</th>
+                            <th scope="col" sortable="dataalteracao">DATA ALTERAÇÃO</th>
+                            <!-- <th scope="col" sortable="dataalteracao" (sort)="onSort($event)">DATA ALTERACAO</th> -->
+                            <th scope="col" sortable="action" class="text-center">AÇÃO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (linguagem of linguagem$ | async; track linguagem) {
+                        <tr>
+                            <td><ngb-highlight [result]="linguagem.id" [term]="service.searchTerm"></ngb-highlight></td>
+                            <td>
+                                <div>
+                                    <div class="d-flex align-items-start flex-column">
+                                        <ngb-highlight [result]="linguagem.nome" [term]="service.searchTerm"
+                                            class="h5 mb-0"></ngb-highlight>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><ngb-highlight [result]="linguagem.usuarioCadastro"
+                                    [term]="service.searchTerm"></ngb-highlight></td>
+                            <td><ngb-highlight [result]="linguagem.dataCadastro | date:'short':'':'pt-BR'"
+                                    [term]="service.searchTerm"></ngb-highlight></td>
+                            <td><ngb-highlight [result]="linguagem.usuarioAlteracao"
+                                    [term]="service.searchTerm"></ngb-highlight></td>
+                            <td><ngb-highlight [result]="linguagem.dataAlteracao | date:'short':'':'pt-BR'"
+                                    [term]="service.searchTerm"></ngb-highlight></td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-icon btn-link-secondary" title="Editar">
+                                    <i class="ti ti-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-link-danger" title="Excluir">
+                                    <i class="ti ti-ban align-text-bottom"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-between align-items-center p-2">
+                    <select class="form-select" title="select item per page" style="width: auto" name="pageSize"
+                        [(ngModel)]="service.pageSize">
+                        <option [ngValue]="2">2 items per page</option>
+                        <option [ngValue]="5">5 items per page</option>
+                        <option [ngValue]="10">10 items per page</option>
+                    </select>
+                    <ngb-pagination [collectionSize]="(total$ | async)!" [(page)]="service.page"
+                        [pageSize]="service.pageSize" class="ms-3"></ngb-pagination>
+                </div>
+            </form>
+        </app-card>
+    </div>
+</div>
+
+<ng-template #content let-offcanvas>
+    <ng-scrollbar style="height: calc(100vh - 0px)" visibility="hover">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Adicionar linguagem</h5>
+            <button type="button" class="btn-close" aria-label="Close"
+                (click)="offcanvas.close('Close click')"></button>
+        </div>
+        <app-cad-linguagem></app-cad-linguagem>
+    </ng-scrollbar>
+</ng-template>
